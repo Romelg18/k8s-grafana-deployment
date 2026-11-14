@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service
+spec:
+  type: NodePort
+  # Cada pod guarda sus sesiones por separado; con affinity el mismo cliente
+  # siempre llega al mismo pod y no se cierra la sesion.
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  selector:
+    app: grafana
+  ports:
+    - port: 3000
+      targetPort: 3000
